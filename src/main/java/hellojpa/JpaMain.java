@@ -13,10 +13,19 @@ public class JpaMain {
         tx.begin();
 
         try {
-            Member member = new Member();
-            member.setUsername("C");
 
+            Team team = new Team();
+            team.setName("Team A");
+
+            em.persist(team);
+
+            Member member = new Member();
+            member.setUsername("Member 1");
+            member.setTeamId(team.getId());
             em.persist(member);
+
+            Member findMember = em.find(Member.class, member.getId());
+            Team findTeam = em.find(Team.class, team.getId());
 
             tx.commit();
         } catch (Exception e) {
