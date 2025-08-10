@@ -2,6 +2,8 @@ package hellojpa;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 public class JpaMain {
 
     public static void main(String[] args) {
@@ -23,10 +25,15 @@ public class JpaMain {
             member.setTeam(team);
             em.persist(member);
 
-            Member findMember = em.find(Member.class, member.getId());
+            em.flush();
+            em.clear();
 
-            Team findTeam = findMember.getTeam();  // 팀을 바로 끄집어 낼 수 있음
-            System.out.println("findTeam: " + findTeam.getName());
+            Member findMember = em.find(Member.class, member.getId());
+            List<Member> members = findMember.getTeam().getMembers();  // 양방향으로 왔다 갔다 할 수 있음
+
+            for (Member m : members) {
+                System.out.println("m = " + m.getUsername());  // m = Member 1
+            }
 
             tx.commit();
         } catch (Exception e) {
