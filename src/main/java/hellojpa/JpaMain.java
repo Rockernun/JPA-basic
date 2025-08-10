@@ -16,24 +16,19 @@ public class JpaMain {
 
         try {
 
-            Team team = new Team();
-            team.setName("Team A");
-            em.persist(team);
-
+            // 멤버 하나 만들고,
             Member member = new Member();
             member.setUsername("Member 1");
-            member.setTeam(team);
             em.persist(member);
+
+            // 팀 하나 만들고,
+            Team team = new Team();
+            team.setName("Team A");
+            team.getMembers().add(member);  // 멤버를 추가
+            em.persist(team);
 
             em.flush();
             em.clear();
-
-            Member findMember = em.find(Member.class, member.getId());
-            List<Member> members = findMember.getTeam().getMembers();  // 양방향으로 왔다 갔다 할 수 있음
-
-            for (Member m : members) {
-                System.out.println("m = " + m.getUsername());  // m = Member 1
-            }
 
             tx.commit();
         } catch (Exception e) {
