@@ -13,7 +13,11 @@ public class Team {
     private Long id;
 
     private String name;
-    
+
+    // 반대 방향 추가
+    @OneToMany(mappedBy = "team")
+    private List<Member> members = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
